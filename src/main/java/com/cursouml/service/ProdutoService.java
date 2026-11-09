@@ -1,5 +1,7 @@
 package com.cursouml.service;
 
+import com.cursouml.exception.ObjectNotFoundException;
+import com.cursouml.model.Categoria;
 import com.cursouml.model.Produto;
 import com.cursouml.repository.ProdutoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +20,12 @@ public class ProdutoService {
     }
 
     public Produto findById(Long id){
-        return repository.findById(id).orElse(null);
+        var produto = repository.findById(id);
+        if(produto.isEmpty()){
+            throw new ObjectNotFoundException("Objeto não encontrado, ID:"+ id +". Tipo Classe: "+ Produto.class.getName());
+        }
+
+        return produto.get();
     }
 
     public Produto create(Produto categoria){
